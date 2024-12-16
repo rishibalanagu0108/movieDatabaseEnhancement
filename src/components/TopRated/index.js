@@ -1,36 +1,32 @@
 import {Component} from 'react'
-
 import Loader from 'react-loader-spinner'
 
-import MovieCard from '../MovieCard'
 import Header from '../Header'
-import './index.css'
+import MovieCard from '../MovieCard'
 
 const apiStatusConstants = {
-  success: 'SUCCESS',
-  loading: 'LOADING',
+  loading: 'loading',
   initial: 'INITIAL',
+  success: 'SUCCESS',
   failure: 'FAILURE',
 }
-class Home extends Component {
+class TopRated extends Component {
   state = {
     apiStatus: apiStatusConstants.initial,
     movies: [],
   }
 
   componentDidMount() {
-    this.getMovieVideos()
+    this.getTopRatedVideos()
   }
 
-  getMovieVideos = async () => {
+  getTopRatedVideos = async () => {
     this.setState({apiStatus: apiStatusConstants.loading})
-
     const API_KEY = '916c8a56fac61e240fbb44770fe2342b'
 
     try {
       const apiUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`
       const response = await fetch(apiUrl)
-
       if (response.ok) {
         const data = await response.json()
         const formattedData = data.results.map(eachMovie => ({
@@ -49,28 +45,27 @@ class Home extends Component {
           voteAverage: eachMovie.vote_average,
           voteCount: eachMovie.vote_count,
         }))
-
         this.setState({
           apiStatus: apiStatusConstants.success,
           movies: formattedData,
         })
       } else {
-        console.error('Failed to fetch movies')
         this.setState({apiStatus: apiStatusConstants.failure})
       }
     } catch (error) {
+      console.log(error)
       this.setState({apiStatus: apiStatusConstants.failure})
     }
   }
 
   renderLoadingView = () => (
     <div className="loading-container">
-      <Loader type="ThreeDots" height="50" width="50" color="#0b69ff" />
+      <Loader type="ThreeDots" height={50} width={50} color="#0bffff" />
     </div>
   )
 
   renderFailureView = () => (
-    <h1 style={{color: 'orange'}}>This is the Failure View</h1>
+    <h1 style={{color: 'orange'}}>This is a Failure View</h1>
   )
 
   renderSuccessView = () => {
@@ -88,8 +83,8 @@ class Home extends Component {
   }
 
   render() {
-    const {apiStatus} = this.state
-    const renderMovieDetails = () => {
+    const renderTopRatedVideos = () => {
+      const {apiStatus} = this.state
       switch (apiStatus) {
         case apiStatusConstants.loading:
           return this.renderLoadingView()
@@ -104,10 +99,10 @@ class Home extends Component {
     return (
       <div className="home-container">
         <Header />
-        {renderMovieDetails()}
+        {renderTopRatedVideos()}
       </div>
     )
   }
 }
 
-export default Home
+export default TopRated

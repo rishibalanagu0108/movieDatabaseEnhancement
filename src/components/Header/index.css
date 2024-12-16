@@ -94,3 +94,24 @@
     font-weight: 530;
   }
 }
+
+.header-nav-search-container {
+  display: flex;
+  align-items: center;
+}
+
+.nav-search-field {
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+  height: 30px;
+  width: 400px;
+}
+
+.nav-button {
+  height: 30px;
+  padding: 0px 10px 0px 10px;
+  background-color: green;
+  color: #fff;
+  margin-left: 15px;
+}
