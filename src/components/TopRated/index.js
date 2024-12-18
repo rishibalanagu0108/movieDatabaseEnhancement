@@ -3,6 +3,7 @@ import Loader from 'react-loader-spinner'
 
 import Header from '../Header'
 import MovieCard from '../MovieCard'
+import Pagenation from '../Pagenation'
 
 const apiStatusConstants = {
   loading: 'loading',
@@ -14,18 +15,19 @@ class TopRated extends Component {
   state = {
     apiStatus: apiStatusConstants.initial,
     movies: [],
+    totalPages: 0,
   }
 
   componentDidMount() {
     this.getTopRatedVideos()
   }
 
-  getTopRatedVideos = async () => {
+  getTopRatedVideos = async (page = 1) => {
     this.setState({apiStatus: apiStatusConstants.loading})
     const API_KEY = '916c8a56fac61e240fbb44770fe2342b'
 
     try {
-      const apiUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`
+      const apiUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=${page}`
       const response = await fetch(apiUrl)
       if (response.ok) {
         const data = await response.json()
@@ -48,6 +50,7 @@ class TopRated extends Component {
         this.setState({
           apiStatus: apiStatusConstants.success,
           movies: formattedData,
+          totalPages: data.total_pages,
         })
       } else {
         this.setState({apiStatus: apiStatusConstants.failure})
@@ -96,10 +99,26 @@ class TopRated extends Component {
           return null
       }
     }
+
+    const renderPagenation = () => {
+      const {apiStatus, totalPages} = this.state
+      return (
+        <div className="pagenation-container">
+          {apiStatus === apiStatusConstants.success && (
+            <Pagenation
+              totalPages={totalPages}
+              apiCallback={this.getTopRatedVideos}
+            />
+          )}
+        </div>
+      )
+    }
+
     return (
       <div className="home-container">
         <Header />
         {renderTopRatedVideos()}
+        {renderPagenation()}
       </div>
     )
   }

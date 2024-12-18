@@ -67,7 +67,6 @@ class Cast extends Component {
   renderCastDetails = () => {
     const {castData} = this.state
     // console.log(castData)
-    console.log(castData)
     return (
       <ul className="cast-list-container">
         {castData.map((each, index) => (

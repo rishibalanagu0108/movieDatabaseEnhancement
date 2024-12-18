@@ -2,6 +2,7 @@ import {Component} from 'react'
 
 import Loader from 'react-loader-spinner'
 
+import Pagenation from '../Pagenation'
 import MovieCard from '../MovieCard'
 import Header from '../Header'
 import './index.css'
@@ -16,19 +17,21 @@ class Home extends Component {
   state = {
     apiStatus: apiStatusConstants.initial,
     movies: [],
+    totalPages: 0,
   }
 
   componentDidMount() {
     this.getMovieVideos()
   }
 
-  getMovieVideos = async () => {
+  getMovieVideos = async (page = 1) => {
+    const {movies} = this.state
     this.setState({apiStatus: apiStatusConstants.loading})
 
     const API_KEY = '916c8a56fac61e240fbb44770fe2342b'
 
     try {
-      const apiUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`
+      const apiUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=${page}`
       const response = await fetch(apiUrl)
 
       if (response.ok) {
@@ -53,7 +56,9 @@ class Home extends Component {
         this.setState({
           apiStatus: apiStatusConstants.success,
           movies: formattedData,
+          totalPages: data.total_pages,
         })
+        console.log(movies)
       } else {
         console.error('Failed to fetch movies')
         this.setState({apiStatus: apiStatusConstants.failure})
@@ -88,7 +93,7 @@ class Home extends Component {
   }
 
   render() {
-    const {apiStatus} = this.state
+    const {apiStatus, totalPages} = this.state
     const renderMovieDetails = () => {
       switch (apiStatus) {
         case apiStatusConstants.loading:
@@ -101,10 +106,22 @@ class Home extends Component {
           return null
       }
     }
+
+    const renderPagenation = () => (
+      <div className="pagenation-container">
+        {apiStatus === apiStatusConstants.success && (
+          <Pagenation
+            totalPages={totalPages}
+            apiCallback={this.getMovieVideos}
+          />
+        )}
+      </div>
+    )
     return (
       <div className="home-container">
         <Header />
         {renderMovieDetails()}
+        {renderPagenation()}
       </div>
     )
   }

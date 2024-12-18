@@ -37,6 +37,10 @@
     margin: 10px;
     align-items: center;
   }
+
+  .movie-name {
+    font-size: 15px;
+  }
 }
 
 .button {

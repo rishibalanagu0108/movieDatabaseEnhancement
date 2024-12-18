@@ -78,16 +78,13 @@ class MovieDetails extends Component {
     const {
       id,
       originalLanguage,
-      originalTitle,
       overview,
       backdropPath,
       posterPath,
       releaseDate,
       title,
-      video,
       runtime,
       voteAverage,
-      voteCount,
       tagline,
       genres,
     } = movieDetailsData
