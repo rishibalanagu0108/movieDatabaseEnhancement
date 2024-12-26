@@ -29,37 +29,32 @@ class UpComing extends Component {
     this.setState({apiStatus: apiStatusConstants.loading})
     const API_KEY = '916c8a56fac61e240fbb44770fe2342b'
 
-    try {
-      const apiUrl = `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=en-US&${page}`
-      const response = await fetch(apiUrl)
-      if (response.ok) {
-        const data = await response.json()
-        const formattedData = data.results.map(eachMovie => ({
-          adult: eachMovie.adult,
-          backdropPath: eachMovie.backdrop_path,
-          genreIds: eachMovie.genre_ids,
-          id: eachMovie.id,
-          originalLanguage: eachMovie.original_language,
-          originalTitle: eachMovie.original_title,
-          overview: eachMovie.overview,
-          popularity: eachMovie.popularity,
-          posterPath: eachMovie.poster_path,
-          releaseDate: eachMovie.release_date,
-          title: eachMovie.title,
-          video: eachMovie.video,
-          voteAverage: eachMovie.vote_average,
-          voteCount: eachMovie.vote_count,
-        }))
-        this.setState({
-          movies: formattedData,
-          apiStatus: apiStatusConstants.success,
-          totalPages: data.total_pages,
-        })
-      } else {
-        this.setState({apiStatus: apiStatusConstants.failure})
-      }
-    } catch (error) {
-      console.log(error)
+    const apiUrl = `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=en-US&${page}`
+    const response = await fetch(apiUrl)
+    if (response.ok) {
+      const data = await response.json()
+      const formattedData = data.results.map(eachMovie => ({
+        adult: eachMovie.adult,
+        backdropPath: eachMovie.backdrop_path,
+        genreIds: eachMovie.genre_ids,
+        id: eachMovie.id,
+        originalLanguage: eachMovie.original_language,
+        originalTitle: eachMovie.original_title,
+        overview: eachMovie.overview,
+        popularity: eachMovie.popularity,
+        posterPath: eachMovie.poster_path,
+        releaseDate: eachMovie.release_date,
+        title: eachMovie.title,
+        video: eachMovie.video,
+        voteAverage: eachMovie.vote_average,
+        voteCount: eachMovie.vote_count,
+      }))
+      this.setState({
+        movies: formattedData,
+        apiStatus: apiStatusConstants.success,
+        totalPages: data.total_pages,
+      })
+    } else {
       this.setState({apiStatus: apiStatusConstants.failure})
     }
   }

@@ -30,40 +30,36 @@ class Home extends Component {
 
     const API_KEY = '916c8a56fac61e240fbb44770fe2342b'
 
-    try {
-      const apiUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=${page}`
-      const response = await fetch(apiUrl)
+    const apiUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=${page}`
+    const response = await fetch(apiUrl)
 
-      if (response.ok) {
-        const data = await response.json()
-        const formattedData = data.results.map(eachMovie => ({
-          adult: eachMovie.adult,
-          backdropPath: eachMovie.backdrop_path,
-          genreIds: eachMovie.genre_ids,
-          id: eachMovie.id,
-          originalLanguage: eachMovie.original_language,
-          originalTitle: eachMovie.original_title,
-          overview: eachMovie.overview,
-          popularity: eachMovie.popularity,
-          posterPath: eachMovie.poster_path,
-          releaseDate: eachMovie.release_date,
-          title: eachMovie.title,
-          video: eachMovie.video,
-          voteAverage: eachMovie.vote_average,
-          voteCount: eachMovie.vote_count,
-        }))
+    if (response.ok) {
+      const data = await response.json()
+      const formattedData = data.results.map(eachMovie => ({
+        adult: eachMovie.adult,
+        backdropPath: eachMovie.backdrop_path,
+        genreIds: eachMovie.genre_ids,
+        id: eachMovie.id,
+        originalLanguage: eachMovie.original_language,
+        originalTitle: eachMovie.original_title,
+        overview: eachMovie.overview,
+        popularity: eachMovie.popularity,
+        posterPath: eachMovie.poster_path,
+        releaseDate: eachMovie.release_date,
+        title: eachMovie.title,
+        video: eachMovie.video,
+        voteAverage: eachMovie.vote_average,
+        voteCount: eachMovie.vote_count,
+      }))
 
-        this.setState({
-          apiStatus: apiStatusConstants.success,
-          movies: formattedData,
-          totalPages: data.total_pages,
-        })
-        console.log(movies)
-      } else {
-        console.error('Failed to fetch movies')
-        this.setState({apiStatus: apiStatusConstants.failure})
-      }
-    } catch (error) {
+      this.setState({
+        apiStatus: apiStatusConstants.success,
+        movies: formattedData,
+        totalPages: data.total_pages,
+      })
+      console.log(movies)
+    } else {
+      console.error('Failed to fetch movies')
       this.setState({apiStatus: apiStatusConstants.failure})
     }
   }

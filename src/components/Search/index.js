@@ -47,7 +47,7 @@ class Search extends Component {
 
   renderSearchResults = () => {
     const {searchResults} = this.state
-    const searchResultsAvailable = searchResults !== undefined
+    const searchResultsAvailable = searchResults && searchResults.length > 0
     return (
       <div className="movie-container">
         <h1 className="heading">Search</h1>
